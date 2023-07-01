@@ -6,16 +6,21 @@ import InputLabel from '@/Components/InputLabel.vue'
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { useForm, Link } from '@inertiajs/inertia-vue3';
 
-const form = useForm({
-    title: '',
-    description: ''
+const props = defineProps({
+    pin: Object
+})
+
+let form = useForm({
+    id: props.pin.id,
+    title: props.pin.title,
+    description: props.pin.description
 });
 
-const create = () => {
-    form.post('/pins/create');
+const update = () => {
+    form.post('/pins/update');
 }
-</script>
 
+</script>
 
 <template>
     <AppLayout title="Dashboard">
@@ -27,7 +32,7 @@ const create = () => {
 
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 shadow-lg rounded-lg bg-white p-8">
-                <form @submit.prevent="create">
+                <form @submit.prevent="update">
                 <div class="mb-6">
                     <div class="flex gap-4">
                         <Link :href="route('pins')">
@@ -35,11 +40,12 @@ const create = () => {
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75" />
                             </svg>
                         </Link>
-                        <h1 class="text-xl mb-2 font-semibold">New Pin</h1>
+                        <h1 class="text-xl mb-2 font-semibold">Edit Pin</h1>
                     </div>
                     <hr/>
                 </div>
                     <div class="body mb-6">
+                        <input type="hidden" v-model="form.id" name="id">
                         <div class="mb-4">
                             <input-label class="mb-1" value="Title" />
                             <text-input v-model="form.title" name="title" class="w-full h-10" />
@@ -50,7 +56,7 @@ const create = () => {
                         </div>
                     </div>
                 <div class="w-full flex justify-end mt-8">
-                    <primary-button>Create</primary-button>
+                    <primary-button>Update</primary-button>
                 </div>
                 </form>
             </div>
